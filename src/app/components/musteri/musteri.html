@@ -1,0 +1,409 @@
+<div class="marketplace-container" lang="tr">
+    <!-- ÜST NAVBAR -->
+    <header class="navbar">
+        <div class="nav-brand" (click)="switchTab('all')">
+            <span class="brand-logo-text">BS <span>OtoPazar</span></span>
+        </div>
+
+        <!-- Üst Kısım Kullanıcı Arama Çubuğu -->
+        <div class="nav-user-search" style="display: flex; align-items: center; position: relative;">
+            <input type="text" [(ngModel)]="navUserSearchQuery" placeholder="Kullanıcı ara..." (keyup.enter)="searchNavUsers()" style="padding: 6px 12px; border-radius: 8px 0 0 8px; border: 1px solid #cbd5e1; outline: none;">
+            <button (click)="searchNavUsers()" style="padding: 6px 12px; background: #0284c7; color: white; border: none; border-radius: 0 8px 8px 0; cursor: pointer;">🔍</button>
+
+            <!-- Canlı Arama Sonuç Kutusu -->
+            <div *ngIf="navSearchResults.length > 0" style="position: absolute; top: 40px; left: 0; background: white; border: 1px solid #cbd5e1; border-radius: 8px; width: 250px; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); z-index: 1000; max-height: 200px; overflow-y: auto;">
+                <div *ngFor="let u of navSearchResults" (click)="openUserProfile(u.id)" style="padding: 10px; display: flex; align-items: center; gap: 8px; cursor: pointer; border-bottom: 1px solid #f1f5f9;" class="search-result-item">
+                    <img [src]="u.profile_image || 'https://via.placeholder.com/30'" style="width:28px; height:28px; border-radius:50%; object-fit:cover;">
+                    <span style="font-size: 13px; font-weight: 600; color: #1e293b;">{{ u.name }}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="nav-tabs">
+            <button [class.active]="activeTab === 'all'" (click)="switchTab('all')">🚗 Tüm İlanlar</button>
+            <button [class.active]="activeTab === 'favorites'" (click)="switchTab('favorites')">❤️ Favorilerim ({{ favoriteIds.length }})</button>
+            <button [class.active]="activeTab === 'my-listings'" (click)="switchTab('my-listings')">📋 İlanlarım</button>
+            <button [class.active]="activeTab === 'friends'" (click)="switchTab('friends')">👥 Arkadaşlar</button>
+            <button class="admin-tab-btn" *ngIf="currentUser.role === 'admin'" [class.active]="activeTab === 'admin-panel'" (click)="switchTab('admin-panel')">⚙️ Admin Paneli</button>
+            <button class="msg-nav-btn" [class.active]="activeTab === 'messages'" (click)="switchTab('messages')">💬 Mesajlar</button>
+            <button [class.active]="activeTab === 'settings'" (click)="switchTab('settings')">👤 Ayarlarım</button>
+        </div>
+
+        <div class="nav-actions">
+            <button class="primary-action-btn" (click)="showAddModal = true">+ İlan Ver</button>
+            <div class="user-profile-menu" (click)="switchTab('settings')" style="cursor: pointer; display: flex; align-items: center; gap: 8px;">
+                <img [src]="currentUser.profile_image || 'https://via.placeholder.com/35'" class="avatar-img" style="width:35px; height:35px; border-radius:50%; object-fit:cover;">
+                <span class="username-display" style="font-weight: 600; color: #1e293b;">Hoş geldin, {{ currentUser.name || currentUser.email || 'Kullanıcı' }}</span>
+            </div>
+            <button class="logout-btn" (click)="logout()">Çıkış</button>
+        </div>
+    </header>
+
+    <!-- KULLANICI PROFİL DETAY SAYFASI (Ziyaret Edilen Profil) -->
+    <div class="main-content-wrapper" *ngIf="activeTab === 'user-profile' && viewedUserProfile" style="flex-direction: column; padding: 20px; align-items: center;">
+        <div style="background: white; padding: 30px; border-radius: 12px; width: 100%; max-width: 900px; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); margin-bottom: 20px; display: flex; align-items: center; justify-content: space-between;">
+            <div style="display: flex; align-items: center; gap: 20px;">
+                <img [src]="viewedUserProfile.profile_image || 'https://via.placeholder.com/90'" style="width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 3px solid #0284c7;">
+                <div>
+                    <h2 style="margin: 0; color: #1e293b;">{{ viewedUserProfile.name }}</h2>
+                    <p style="margin: 5px 0 0 0; color: #64748b;">E-posta: {{ viewedUserProfile.email }} | Tel: {{ viewedUserProfile.phone || 'Belirtilmemiş' }}</p>
+                </div>
+            </div>
+            <div style="display: flex; gap: 10px;" *ngIf="viewedUserProfile.id !== currentUser.id">
+                <button class="primary-action-btn" (click)="addFriendFromProfile(viewedUserProfile.id)">+ Arkadaş Ekle</button>
+                <button class="btn-sm status-btn" (click)="startChatWithUserProfile(viewedUserProfile)" style="background: #0284c7; color: white; padding: 10px 16px; border: none; border-radius: 8px; cursor: pointer; font-weight: 600;">💬 Mesaj Gönder</button>
+            </div>
+        </div>
+
+        <!-- Kullanıcının İlanları -->
+        <div style="width: 100%; max-width: 900px;">
+            <h3 style="margin-bottom: 15px; color: #1e293b;">{{ viewedUserProfile.name }} Adlı Kullanıcının İlanları</h3>
+            <div class="listings-grid">
+                <div class="listing-card" *ngFor="let item of viewedUserListings" (click)="openDetail(item)">
+                    <div class="card-image-box">
+                        <img [src]="item.photos && item.photos.length > 0 ? item.photos[0] : 'https://via.placeholder.com/300x180'">
+                        <span class="condition-badge">{{ item.condition_type }}</span>
+                    </div>
+                    <div class="card-details">
+                        <span class="listing-price">{{ item.price | number }} TL</span>
+                        <h4 class="listing-title">{{ item.title }}</h4>
+                        <div class="listing-specs">{{ item.year }} • {{ item.kilometer | number }} km • {{ item.fuel_type }}</div>
+                    </div>
+                </div>
+                <div *ngIf="viewedUserListings.length === 0" class="no-msg" style="grid-column: span 3; text-align: center; padding: 30px; background: white; border-radius: 12px;">Bu kullanıcının aktif ilanı bulunmuyor.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ANA İÇERİK & FİLTRELER (Tüm İlanlar / Favoriler) -->
+    <div class="main-content-wrapper" *ngIf="(activeTab === 'all' || activeTab === 'favorites') && !selectedListing">
+        <aside class="filter-sidebar">
+            <h3>🔍 Detaylı Filtreleme</h3>
+            <div class="filter-group">
+                <label>Şehir</label>
+                <select [(ngModel)]="selectedCity" (change)="applyFilters()">
+                    <option value="">Tüm Şehirler</option>
+                    <option *ngFor="let c of cities" [value]="c">{{ c }}</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Marka</label>
+                <select [(ngModel)]="selectedBrand" (change)="onBrandChange()">
+                    <option value="">Tüm Markalar</option>
+                    <option *ngFor="let b of brands" [value]="b">{{ b }}</option>
+                </select>
+            </div>
+            <div class="filter-group" *ngIf="availableModels.length > 0">
+                <label>Model</label>
+                <select [(ngModel)]="selectedModel" (change)="applyFilters()">
+                    <option value="">Tüm Modeller</option>
+                    <option *ngFor="let m of availableModels" [value]="m">{{ m }}</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>Fiyat (TL)</label>
+                <div class="price-inputs">
+                    <input type="number" placeholder="Min" [(ngModel)]="minPrice" (input)="applyFilters()">
+                    <span>-</span>
+                    <input type="number" placeholder="Max" [(ngModel)]="maxPrice" (input)="applyFilters()">
+                </div>
+            </div>
+            <button class="reset-filter-btn" (click)="resetFilters()">🔄 Filtreleri Sıfırla</button>
+        </aside>
+
+        <main class="listings-section">
+            <div class="listings-header">
+                <h2>Araç İlanları</h2>
+                <span>{{ listings.length }} ilan listeleniyor</span>
+            </div>
+            <div class="listings-grid">
+                <div class="listing-card" *ngFor="let item of listings" (click)="openDetail(item)" [class.featured-card]="item.is_featured">
+                    <div class="card-image-box">
+                        <img [src]="item.photos && item.photos.length > 0 ? item.photos[0] : 'https://via.placeholder.com/300x180'">
+                        <span class="featured-badge" *ngIf="item.is_featured">⭐ Öne Çıkan</span>
+                        <button class="fav-btn" (click)="$event.stopPropagation(); toggleFavorite(item.id)">{{ isFavorite(item.id) ? '❤️' : '🤍' }}</button>
+                        <span class="condition-badge">{{ item.condition_type }}</span>
+                    </div>
+                    <div class="card-details">
+                        <span class="listing-price">{{ item.price | number }} TL</span>
+                        <h4 class="listing-title">{{ item.title }}</h4>
+                        <div class="listing-specs">{{ item.year }} • {{ item.kilometer | number }} km • {{ item.fuel_type }}</div>
+                        <div class="listing-location" style="display: flex; align-items: center; gap: 6px;">
+                            <img [src]="item.owner_avatar || 'https://via.placeholder.com/25'" style="width:22px; height:22px; border-radius:50%; object-fit:cover; cursor: pointer;" (click)="$event.stopPropagation(); openUserProfile(item.user_id)">
+                            <span (click)="$event.stopPropagation(); openUserProfile(item.user_id)" style="cursor: pointer;">📍 {{ item.city }} / {{ item.district }} - <b style="color: #0284c7;">{{ item.owner_name }}</b></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- İLAN DETAY SAYFASI -->
+    <div class="main-content-wrapper detail-page-container" *ngIf="selectedListing">
+        <div class="detail-page-header">
+            <button class="back-btn" (click)="selectedListing = null">← İlanlara Geri Dön</button>
+            <h2>{{ selectedListing.title }}</h2>
+        </div>
+
+        <div class="detail-content-grid">
+            <div class="detail-gallery-side">
+                <img [src]="selectedListing.photos[activeImageIndex] || 'https://via.placeholder.com/600x400'" class="main-detail-img">
+                <div class="thumbnail-row" *ngIf="selectedListing.photos?.length > 1">
+                    <img *ngFor="let p of selectedListing.photos; let i = index" [src]="p" class="thumb-img" [class.active-thumb]="i === activeImageIndex" (click)="activeImageIndex = i">
+                </div>
+            </div>
+
+            <div class="detail-info-side">
+                <span class="listing-price" style="font-size: 28px;">{{ selectedListing.price | number }} TL</span>
+                <p class="detail-loc">📍 {{ selectedListing.city }} / {{ selectedListing.district }}</p>
+                <hr class="divider">
+
+                <div class="specs-grid-lines">
+                    <div class="spec-row" style="display: flex; align-items: center; gap: 8px; cursor: pointer;" (click)="openUserProfile(selectedListing.user_id)">
+                        <span>İlan Sahibi:</span>
+                        <img [src]="selectedListing.owner_avatar || 'https://via.placeholder.com/25'" style="width:24px; height:24px; border-radius:50%; object-fit:cover;">
+                        <b style="color: #0284c7; text-decoration: underline;">{{ selectedListing.owner_name }} (Profili Gör)</b>
+                    </div>
+                    <div class="spec-row"><span>İletişim Telefonu:</span> <b>📞 {{ selectedListing.owner_phone || 'Belirtilmemiş' }}</b></div>
+                    <div class="spec-row"><span>Marka / Model:</span> <b>{{ selectedListing.brand }} / {{ selectedListing.model }}</b></div>
+                    <div class="spec-row"><span>Yıl:</span> <b>{{ selectedListing.year }}</b></div>
+                    <div class="spec-row"><span>Kilometre:</span> <b>{{ selectedListing.kilometer | number }} km</b></div>
+                </div>
+
+                <div class="message-box-section" *ngIf="selectedListing.user_id !== currentUser.id">
+                    <h4>💬 İlan Sahibine Mesaj Gönder</h4>
+                    <textarea [(ngModel)]="directMessageText" rows="3" placeholder="Araç hakkında bilgi almak istiyorum..."></textarea>
+                    <button class="primary-action-btn" (click)="sendDirectMessage(selectedListing)">Mesajı Gönder</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="detail-bottom-section">
+            <hr class="divider">
+            <p class="desc-text"><b>Açıklama:</b><br>{{ selectedListing.description }}</p>
+            <hr class="divider">
+
+            <div class="comments-section-box">
+                <h3>💬 Soru & Cevap / Yorumlar</h3>
+                <div class="comment-input-area">
+                    <input type="text" [(ngModel)]="newCommentText" placeholder="Bu araç hakkında bir soru sor...">
+                    <button class="primary-action-btn" (click)="addComment()">Yorum Yap</button>
+                </div>
+
+                <div class="comments-list">
+                    <div class="comment-item-wrapper" *ngFor="let comm of listingComments" style="margin-bottom: 12px;">
+                        <div class="comment-item" style="background: #f8fafc; padding: 12px; border-radius: 10px; border: 1px solid #e2e8f0;">
+                            <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 6px;">
+                                <img [src]="comm.commenter_avatar || 'https://via.placeholder.com/30'" style="width:28px; height:28px; border-radius:50%; object-fit:cover; cursor:pointer;" (click)="openUserProfile(comm.user_id)">
+                                <b style="cursor:pointer; color: #0284c7;" (click)="openUserProfile(comm.user_id)">{{ comm.commenter_name }}</b>
+                                <span class="comment-time" style="margin-left: auto; font-size: 11px; color: #64748b;">{{ comm.created_at | date:'short' }}</span>
+                            </div>
+                            <p style="margin: 4px 0 8px 36px;">{{ comm.comment }}</p>
+                            <button class="reply-toggle-btn" (click)="comm.showReplyInput = !comm.showReplyInput" style="margin-left: 36px; background: none; border: none; color: #0284c7; cursor: pointer; font-weight: 600;">↩️ Yanıtla</button>
+                        </div>
+
+                        <div class="reply-input-box" *ngIf="comm.showReplyInput" style="margin-top: 8px; margin-left: 40px; display: flex; gap: 10px;">
+                            <input type="text" [(ngModel)]="comm.replyText" placeholder="Yanıtınızı yazın..." style="flex:1; padding:8px 12px; border:2px solid #cbd5e1; border-radius:10px;">
+                            <button class="btn-sm status-btn" (click)="addReply(comm)">Gönder</button>
+                        </div>
+
+                        <div class="replies-list" *ngIf="comm.replies && comm.replies.length > 0" style="margin-top: 8px; margin-left: 40px; display:flex; flex-direction:column; gap:6px;">
+                            <div class="reply-item" *ngFor="let rep of comm.replies" style="background:#f1f5f9; padding:10px; border-radius:10px; border:1px solid #e2e8f0; font-size:12px;">
+                                <div style="display: flex; align-items: center; gap: 6px; margin-bottom: 4px;">
+                                    <img [src]="rep.replier_avatar || 'https://via.placeholder.com/24'" style="width:22px; height:22px; border-radius:50%; object-fit:cover; cursor:pointer;" (click)="openUserProfile(rep.user_id)">
+                                    <b style="cursor:pointer; color: #0284c7;" (click)="openUserProfile(rep.user_id)">{{ rep.replier_name }}</b>
+                                </div>
+                                <p style="margin-left: 28px;">{{ rep.reply }}</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="listingComments.length === 0" class="no-msg">Henüz soru sorulmamış.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ARKADAŞLARIM SEKMESİ -->
+    <div class="main-content-wrapper" *ngIf="activeTab === 'friends' && !selectedListing" style="flex-direction: column; padding: 20px;">
+        <div style="background: white; padding: 20px; border-radius: 12px; width: 100%; max-width: 800px; margin: 0 auto; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);">
+            <h3>👥 Arkadaş Ekle & Arkadaşlarım</h3>
+            <div style="display: flex; gap: 10px; margin-top: 15px; margin-bottom: 20px;">
+                <input type="text" [(ngModel)]="friendSearchQuery" placeholder="Kullanıcı adı ile arat..." style="flex:1; padding:10px; border:1px solid #cbd5e1; border-radius:8px;">
+                <button class="primary-action-btn" (click)="searchUsers()">Ara</button>
+            </div>
+
+            <!-- Arama Sonuçları -->
+            <div *ngIf="searchResults.length > 0" style="margin-bottom: 20px;">
+                <h4>Arama Sonuçları:</h4>
+                <div *ngFor="let u of searchResults" style="display: flex; align-items: center; justify-content: space-between; padding: 10px; background: #f8fafc; border-radius: 8px; margin-top: 8px;">
+                    <div style="display: flex; align-items: center; gap: 10px; cursor: pointer;" (click)="openUserProfile(u.id)">
+                        <img [src]="u.profile_image || 'https://via.placeholder.com/35'" style="width:35px; height:35px; border-radius:50%; object-fit:cover;">
+                        <b style="color: #0284c7; text-decoration: underline;">{{ u.name }} (Profili Gör)</b>
+                    </div>
+                    <button class="btn-sm status-btn" (click)="addFriend(u.id)">+ Arkadaş Ekle</button>
+                </div>
+            </div>
+
+            <h4>Kayıtlı Arkadaşlarım:</h4>
+            <div class="friends-list" style="margin-top: 10px;">
+                <div *ngFor="let f of friendsList" style="display: flex; align-items: center; justify-content: space-between; padding: 12px; background: #f1f5f9; border-radius: 10px; margin-top: 10px;">
+                    <div style="display: flex; align-items: center; gap: 10px; cursor: pointer;" (click)="openUserProfile(f.id)">
+                        <img [src]="f.profile_image || 'https://via.placeholder.com/40'" style="width:40px; height:40px; border-radius:50%; object-fit:cover;">
+                        <div>
+                            <b style="color: #0284c7; text-decoration: underline;">{{ f.name }}</b>
+                            <p style="font-size: 12px; color: #64748b; margin: 0;">Profili incelemek için tıkla</p>
+                        </div>
+                    </div>
+                    <div style="display: flex; gap: 8px;">
+                        <button class="primary-action-btn" (click)="startChatWithFriend(f)" style="padding: 6px 12px; font-size: 12px;">💬 Mesaj</button>
+                        <button class="btn-sm delete-btn" (click)="removeFriend(f.id)" style="background: #ef4444; color: white; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer; font-size: 12px;">❌ Çıkar</button>
+                    </div>
+                </div>
+                <div *ngIf="friendsList.length === 0" class="no-msg">Henüz arkadaşınız yok.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- AYARLAR / PROFİL SEKMESİ -->
+    <div class="main-content-wrapper" *ngIf="activeTab === 'settings' && !selectedListing" style="justify-content: center;">
+        <div class="filter-sidebar" style="width: 600px; margin: 0 auto; position: static;">
+            <h3>👤 Profil & Hesap Ayarları</h3>
+            <div class="input-group" style="margin-bottom: 15px; text-align: center;">
+                <label style="display:block; margin-bottom: 8px;">Mevcut Profil Fotoğrafı</label>
+                <img [src]="currentUser.profile_image || 'https://via.placeholder.com/100'" style="width: 90px; height: 90px; border-radius: 50%; object-fit: cover; border: 3px solid #cbd5e1; margin-bottom: 10px;">
+                <input type="file" (change)="onProfilePhotoSelected($event)" style="display: block; margin: 0 auto;">
+            </div>
+            <div class="input-group" style="margin-bottom: 15px;">
+                <label>Ad Soyad</label>
+                <input type="text" [(ngModel)]="currentUser.name" style="width:100%; padding:10px; border-radius:10px; border:1px solid #cbd5e1;">
+            </div>
+            <div class="input-group" style="margin-bottom: 15px;">
+                <label>E-posta Adresi</label>
+                <input type="email" [(ngModel)]="currentUser.email" style="width:100%; padding:10px; border-radius:10px; border:1px solid #cbd5e1;">
+            </div>
+            <div class="input-group" style="margin-bottom: 20px;">
+                <label>Telefon Numarası</label>
+                <input type="text" [(ngModel)]="currentUser.phone" style="width:100%; padding:10px; border-radius:10px; border:1px solid #cbd5e1;">
+            </div>
+            <button class="primary-action-btn" style="width: 100%;" (click)="updateProfile()">Bilgileri Güncelle</button>
+        </div>
+    </div>
+
+    <!-- MESSENGER MESAJLAR PANELI -->
+    <div class="main-content-wrapper messenger-wrapper" *ngIf="activeTab === 'messages' && !selectedListing">
+        <div class="messenger-container-fb">
+            <div class="messenger-sidebar">
+                <div class="messenger-header-title">
+                    <h2>Sohbetler</h2>
+                </div>
+                <div class="chat-list">
+                    <div class="chat-item" *ngFor="let msg of messages" (click)="selectChatUser(msg)">
+                        <div class="chat-avatar">
+                            <img [src]="msg.sender_id === currentUser.id ? (msg.receiver_avatar || 'https://via.placeholder.com/35') : (msg.sender_avatar || 'https://via.placeholder.com/35')" style="width:35px; height:35px; border-radius:50%; object-fit:cover;">
+                        </div>
+                        <div class="chat-info">
+                            <b>{{ msg.sender_id === currentUser.id ? msg.receiver_name : msg.sender_name }}</b>
+                            <p>{{ msg.message }}</p>
+                        </div>
+                        <span class="chat-time">{{ msg.created_at | date:'shortTime' }}</span>
+                    </div>
+                    <div *ngIf="messages.length === 0" class="no-msg">Aktif sohbetiniz yok.</div>
+                </div>
+            </div>
+            <div class="messenger-chat-area">
+                <div class="chat-active-header">
+                    <h3>{{ activeChatUser ? activeChatUser.name : 'Sohbet Seçin' }}</h3>
+                </div>
+                <div class="chat-messages-box">
+                    <div class="fb-bubble" *ngFor="let msg of activeChatMessages" [class.fb-bubble-outgoing]="msg.sender_id === currentUser.id" [class.fb-bubble-incoming]="msg.sender_id !== currentUser.id">
+                        <p>{{ msg.message }}</p>
+                        <span class="bubble-time">{{ msg.created_at | date:'short' }}</span>
+                    </div>
+                    <div *ngIf="!activeChatUser" class="no-msg" style="margin-top: 100px;">Mesajlaşmak için bir sohbet seçin veya profil sayfalarından mesaj başlatın.</div>
+                </div>
+                <div class="chat-input-box" *ngIf="activeChatUser" style="padding: 15px; display: flex; gap: 10px; background: white; border-top: 1px solid #e2e8f0;">
+                    <input type="text" [(ngModel)]="messengerInputText" placeholder="Bir mesaj yazın..." style="flex:1; padding:10px; border:1px solid #cbd5e1; border-radius:8px;" (keyup.enter)="sendChatMessage()">
+                    <button class="primary-action-btn" (click)="sendChatMessage()">Gönder</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ADMIN & İLANLARIM -->
+    <main class="main-content-wrapper" *ngIf="activeTab === 'admin-panel' && !selectedListing">
+        <div class="listings-section" style="width: 100%;">
+            <div class="listings-header">
+                <h2>⚙️ Admin Paneli</h2>
+            </div>
+            <div class="listings-grid">
+                <div class="listing-card" *ngFor="let item of listings" (click)="openDetail(item)">
+                    <div class="card-image-box"><img [src]="item.photos?.[0] || 'https://via.placeholder.com/300x180'"></div>
+                    <div class="card-details">
+                        <span class="listing-price">{{ item.price | number }} TL</span>
+                        <h4 class="listing-title">{{ item.title }}</h4>
+                        <div class="my-listing-actions" (click)="$event.stopPropagation()">
+                            <button class="btn-sm status-btn" (click)="toggleFeatured(item)">{{ item.is_featured ? 'Kaldır' : '⭐ Başa Tuttur' }}</button>
+                            <button class="btn-sm delete-btn" (click)="deleteListing(item.id)">Sil</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <main class="main-content-wrapper" *ngIf="activeTab === 'my-listings' && !selectedListing">
+        <div class="listings-section" style="width: 100%;">
+            <div class="listings-header">
+                <h2>Yayınladığım İlanlar</h2>
+                <button class="primary-action-btn" (click)="showAddModal = true">+ Yeni İlan Ekle</button>
+            </div>
+            <div class="listings-grid">
+                <div class="listing-card" *ngFor="let item of listings" (click)="openDetail(item)">
+                    <div class="card-image-box"><img [src]="item.photos?.[0] || 'https://via.placeholder.com/300x180'"></div>
+                    <div class="card-details">
+                        <span class="listing-price">{{ item.price | number }} TL</span>
+                        <h4 class="listing-title">{{ item.title }}</h4>
+                        <div class="my-listing-actions" (click)="$event.stopPropagation()">
+                            <button class="btn-sm status-btn" (click)="updateListingStatus(item, item.status === 'Aktif' ? 'Satıldı' : 'Aktif')">{{ item.status === 'Aktif' ? 'Satıldı Yap' : 'Aktif Yap' }}</button>
+                            <button class="btn-sm delete-btn" (click)="deleteListing(item.id)">Sil</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- İLAN VER MODALI -->
+    <div class="modal-backdrop" *ngIf="showAddModal">
+        <div class="modal-content large-modal">
+            <div class="modal-header">
+                <h2>Yeni Araç İlanı Ver</h2>
+                <button class="close-btn" (click)="showAddModal = false">✕</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-grid">
+                    <div class="input-group full-width"><label>İlan Başlığı</label><input type="text" [(ngModel)]="newListingData.title"></div>
+                    <div class="input-group"><label>Marka</label><select [(ngModel)]="newListingData.brand" (change)="onModalBrandChange()"><option value="">Seçin</option><option *ngFor="let b of brands" [value]="b">{{ b }}</option></select></div>
+                    <div class="input-group"><label>Model</label><select [(ngModel)]="newListingData.model"><option value="">Önce Marka</option><option *ngFor="let m of availableModalModels" [value]="m">{{ m }}</option></select></div>
+                    <div class="input-group"><label>Yıl</label><input type="number" [(ngModel)]="newListingData.year"></div>
+                    <div class="input-group"><label>Fiyat (TL)</label><input type="number" [(ngModel)]="newListingData.price"></div>
+                    <div class="input-group"><label>Kilometre</label><input type="number" [(ngModel)]="newListingData.kilometer"></div>
+                    <div class="input-group"><label>Şehir</label><select [(ngModel)]="newListingData.city"><option *ngFor="let c of cities" [value]="c">{{ c }}</option></select></div>
+                    <div class="input-group"><label>İlçe</label><input type="text" [(ngModel)]="newListingData.district"></div>
+                    <div class="input-group full-width">
+                        <label>Fotoğraf Seç</label>
+                        <input type="file" multiple (change)="onPhotoSelected($event)">
+                        <div class="photo-preview-list">
+                            <div *ngFor="let p of newListingData.photos; let i = index" style="position:relative; display:inline-block;">
+                                <img [src]="p" class="preview-thumb">
+                                <button type="button" class="remove-photo-btn" (click)="removePhoto(i)">✕</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-group full-width"><label>Açıklama</label><textarea rows="3" [(ngModel)]="newListingData.description"></textarea></div>
+                </div>
+            </div>
+            <div class="modal-footer"><button class="primary-action-btn" (click)="createListing()">İlanı Yayınla</button></div>
+        </div>
+    </div>
+</div>

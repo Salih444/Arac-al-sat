@@ -1,0 +1,373 @@
+<div class="login-container">
+
+    <!-- Arkada süzülen fütüristik ışık sızıntıları -->
+    <div class="neon-glow glow-1"></div>
+    <div class="neon-glow glow-2"></div>
+
+    <!-- EKRANIN ÇEŞİTLİ YERLERİNDE DİNAMİK HAREKET EDEN OTOMOTİV NESNELERİ & GEÇEN ARAÇLAR -->
+    <div class="dynamic-motion-canvas">
+
+        <!-- 1. ŞERİT: Kartın Alt-Arkasından Geçen Şerit (Soldan Sağa Araç Trafiği) -->
+        <div class="cruising-car-highway highway-main-lane">
+            <div class="highway-road-surface">
+                <div class="road-dash-line"></div>
+            </div>
+
+            <!-- Araba 1: Lüks Süperspor (Hızlı & Neon Mavi) -->
+            <div class="neon-cruiser-car car-supercar speed-fast lane-flow-1">
+                <div class="car-headlight-flare"></div>
+                <svg class="cruiser-svg" viewBox="0 0 280 75" fill="none">
+                    <path d="M12 56 L42 56 C50 44 68 44 76 56 L175 56 C183 44 201 44 209 56 L262 56 C272 56 276 48 268 42 L242 32 L192 16 L112 16 L76 32 L46 38 C34 40 28 48 12 56 Z"
+                          fill="#080d1a" stroke="#38bdf8" stroke-width="2.5" />
+                    <path d="M110 20 L188 20 L232 34 H78 Z" fill="rgba(56, 189, 248, 0.3)" stroke="#38bdf8" stroke-width="1.2" />
+                    <circle cx="265" cy="46" r="4.5" fill="#ffffff" filter="drop-shadow(0 0 10px #38bdf8)" />
+                    <circle cx="16" cy="48" r="3.5" fill="#f43f5e" filter="drop-shadow(0 0 8px #f43f5e)" />
+                    <circle cx="59" cy="56" r="11" fill="#020617" stroke="#38bdf8" stroke-width="2.2" stroke-dasharray="3 3" class="spin-wheel" />
+                    <circle cx="192" cy="56" r="11" fill="#020617" stroke="#38bdf8" stroke-width="2.2" stroke-dasharray="3 3" class="spin-wheel" />
+                </svg>
+                <div class="car-taillight-trail"></div>
+            </div>
+
+            <!-- Araba 2: Lüks Yönetici Sedanı (Orta Hız & İndigo) -->
+            <div class="neon-cruiser-car car-sedan speed-mid lane-flow-2">
+                <div class="car-headlight-flare"></div>
+                <svg class="cruiser-svg" viewBox="0 0 270 75" fill="none">
+                    <path d="M10 56 L40 56 C48 45 66 45 74 56 L175 56 C183 45 201 45 209 56 L254 56 C262 56 265 48 258 42 L232 32 L172 16 L92 16 L54 32 L30 38 C20 40 16 48 10 56 Z"
+                          fill="#090d1a" stroke="#818cf8" stroke-width="2.4" />
+                    <path d="M90 20 L168 20 L224 33 H58 Z" fill="rgba(129, 140, 248, 0.25)" stroke="#818cf8" stroke-width="1.2" />
+                    <circle cx="256" cy="46" r="4.5" fill="#ffffff" filter="drop-shadow(0 0 10px #818cf8)" />
+                    <circle cx="14" cy="48" r="3.5" fill="#f43f5e" filter="drop-shadow(0 0 8px #f43f5e)" />
+                    <circle cx="60" cy="56" r="11" fill="#020617" stroke="#818cf8" stroke-width="2.2" stroke-dasharray="3 3" class="spin-wheel" />
+                    <circle cx="192" cy="56" r="11" fill="#020617" stroke="#818cf8" stroke-width="2.2" stroke-dasharray="3 3" class="spin-wheel" />
+                </svg>
+                <div class="car-taillight-trail"></div>
+            </div>
+
+            <!-- Araba 3: Lüks SUV / Crossover (Heybetli) -->
+            <div class="neon-cruiser-car car-suv speed-cruiser lane-flow-3">
+                <div class="car-headlight-flare beam-wide"></div>
+                <svg class="cruiser-svg" viewBox="0 0 280 85" fill="none">
+                    <path d="M12 68 L44 68 C53 54 74 54 83 68 L185 68 C194 54 215 54 224 68 L262 68 C272 68 276 58 268 50 L242 38 L206 18 L80 18 L52 36 L26 44 C16 46 14 56 12 68 Z"
+                          fill="#0b1329" stroke="#38bdf8" stroke-width="2.5" />
+                    <path d="M78 23 L200 23 L234 38 H54 Z" fill="rgba(56, 189, 248, 0.25)" stroke="#38bdf8" stroke-width="1.2" />
+                    <circle cx="265" cy="56" r="5" fill="#ffffff" filter="drop-shadow(0 0 10px #38bdf8)" />
+                    <circle cx="16" cy="58" r="4" fill="#f43f5e" filter="drop-shadow(0 0 8px #f43f5e)" />
+                    <circle cx="64" cy="68" r="13" fill="#020617" stroke="#38bdf8" stroke-width="2.2" stroke-dasharray="4 4" class="spin-wheel" />
+                    <circle cx="204" cy="68" r="13" fill="#020617" stroke="#38bdf8" stroke-width="2.2" stroke-dasharray="4 4" class="spin-wheel" />
+                </svg>
+                <div class="car-taillight-trail trail-long"></div>
+            </div>
+        </div>
+
+        <!-- 2. ŞERİT: Kartın Üst-Arkasından Geçen Karşı Şerit (Sağdan Sola Araç Trafiği) -->
+        <div class="cruising-car-highway highway-upper-lane">
+            <div class="highway-road-surface">
+                <div class="road-dash-line line-rev"></div>
+            </div>
+
+            <!-- Karşı Araba 1: Hypercar (Neon Mor / Hızlı) -->
+            <div class="neon-cruiser-car car-hyper speed-fast-rev rev-flow-1">
+                <div class="car-headlight-flare flare-reverse"></div>
+                <svg class="cruiser-svg" viewBox="0 0 260 70" fill="none">
+                    <path d="M248 54 L220 54 C212 42 194 42 186 54 L92 54 C84 42 66 42 58 54 L12 54 C4 54 0 46 8 40 L30 30 L80 15 L158 15 L192 30 L222 36 C234 38 238 46 248 54 Z"
+                          fill="#0f172a" stroke="#c084fc" stroke-width="2.4" />
+                    <path d="M154 18 L82 18 L38 30 H188 Z" fill="rgba(192, 132, 252, 0.3)" stroke="#c084fc" stroke-width="1.2" />
+                    <circle cx="10" cy="44" r="4.5" fill="#ffffff" filter="drop-shadow(0 0 10px #c084fc)" />
+                    <circle cx="244" cy="46" r="3.5" fill="#f43f5e" filter="drop-shadow(0 0 8px #f43f5e)" />
+                    <circle cx="203" cy="54" r="10" fill="#020617" stroke="#c084fc" stroke-width="2.2" stroke-dasharray="3 3" class="spin-wheel" />
+                    <circle cx="75" cy="54" r="10" fill="#020617" stroke="#c084fc" stroke-width="2.2" stroke-dasharray="3 3" class="spin-wheel" />
+                </svg>
+                <div class="car-taillight-trail trail-reverse"></div>
+            </div>
+
+            <!-- Karşı Araba 2: GT Coupe (Zümrüt Yeşili Neon) -->
+            <div class="neon-cruiser-car car-gt speed-mid-rev rev-flow-2">
+                <div class="car-headlight-flare flare-reverse flare-emerald"></div>
+                <svg class="cruiser-svg" viewBox="0 0 260 75" fill="none">
+                    <path d="M250 56 L222 56 C214 45 196 45 188 56 L95 56 C87 45 69 45 61 56 L14 56 C6 56 2 48 10 42 L38 32 L98 16 L174 16 L210 32 L232 38 C242 40 246 48 250 56 Z"
+                          fill="#090d1a" stroke="#34d399" stroke-width="2.4" />
+                    <path d="M170 20 L98 20 L46 32 H206 Z" fill="rgba(52, 211, 153, 0.25)" stroke="#34d399" stroke-width="1.2" />
+                    <circle cx="12" cy="46" r="4.5" fill="#ffffff" filter="drop-shadow(0 0 10px #34d399)" />
+                    <circle cx="246" cy="48" r="3.5" fill="#f43f5e" filter="drop-shadow(0 0 8px #f43f5e)" />
+                    <circle cx="205" cy="56" r="11" fill="#020617" stroke="#34d399" stroke-width="2.2" stroke-dasharray="3 3" class="spin-wheel" />
+                    <circle cx="78" cy="56" r="11" fill="#020617" stroke="#34d399" stroke-width="2.2" stroke-dasharray="3 3" class="spin-wheel" />
+                </svg>
+                <div class="car-taillight-trail trail-reverse"></div>
+            </div>
+        </div>
+
+        <!-- 3. Ekranın Çeşitli Yerlerinde Dinamik Yüzen Otomotiv Kapsülleri -->
+        <div class="live-motion-badge badge-pos-1">
+            <div class="badge-glass-wrap">
+                <div class="tachometer-dial">
+                    <svg viewBox="0 0 36 36" class="tacho-mini-svg">
+                        <circle cx="18" cy="18" r="14" stroke="rgba(56, 189, 248, 0.2)" stroke-width="3" fill="none" />
+                        <circle cx="18" cy="18" r="14" stroke="#38bdf8" stroke-width="3" stroke-dasharray="60 100" fill="none" class="tacho-glow-arc" />
+                        <line x1="18" y1="18" x2="25" y2="10" stroke="#ffffff" stroke-width="2" stroke-linecap="round" class="needle-pulse" />
+                    </svg>
+                </div>
+                <div class="badge-text-group">
+                    <span class="badge-sub-title">240 KM/S</span>
+                    <span class="badge-label-cyan">CANLI HIZ KADRANI</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="live-motion-badge badge-pos-2">
+            <div class="badge-glass-wrap badge-emerald-theme">
+                <div class="badge-icon-box">🔑</div>
+                <div class="badge-text-group">
+                    <span class="badge-main-text">ANAHTAR TESLİM</span>
+                    <span class="badge-sub-text">15 Dk. Noter Satışı</span>
+                </div>
+                <span class="badge-live-dot dot-emerald"></span>
+            </div>
+        </div>
+
+        <div class="live-motion-badge badge-pos-3">
+            <div class="badge-glass-wrap badge-cyan-theme">
+                <div class="badge-icon-box">🚗</div>
+                <div class="badge-text-group">
+                    <span class="badge-main-text">%100 EKSPERTİZ</span>
+                    <span class="badge-sub-text">KM & Tramer Doğrulandı</span>
+                </div>
+                <span class="badge-check-icon">✓</span>
+            </div>
+        </div>
+
+        <div class="live-motion-badge badge-pos-4">
+            <div class="badge-glass-wrap badge-purple-theme">
+                <div class="badge-icon-box">📈</div>
+                <div class="badge-text-group">
+                    <span class="badge-main-text">CANLI PİYASA</span>
+                    <span class="badge-sub-text">Anında Nakit Alım Teklifi</span>
+                </div>
+                <span class="badge-pill-growth">+14.8%</span>
+            </div>
+        </div>
+
+        <div class="live-motion-badge badge-pos-5">
+            <div class="badge-glass-wrap badge-gold-theme">
+                <div class="badge-icon-box">🏎️</div>
+                <div class="badge-text-group">
+                    <span class="badge-main-text">PREMIUM PORTFÖY</span>
+                    <span class="badge-sub-text">12.500+ Doğrulanmış İlan</span>
+                </div>
+                <span class="badge-vip-tag">VIP</span>
+            </div>
+        </div>
+
+        <div class="live-motion-badge badge-pos-6">
+            <div class="badge-glass-wrap badge-blue-theme">
+                <div class="badge-icon-box">🛡️</div>
+                <div class="badge-text-group">
+                    <span class="badge-main-text">GÜVENLİ BLOKE HESAP</span>
+                    <span class="badge-sub-text">Sıfır Riskli Para Transferi</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="auth-card">
+
+        <!-- Üst Kontrol & Durum Çubuğu -->
+        <div class="card-top-bar">
+            <div class="system-status">
+                <span class="status-indicator"></span>
+                <span class="status-text">SECURE TERMINAL // ACTIVE</span>
+            </div>
+            <div class="system-badge">
+                <span class="badge-dot"></span>
+                <span class="badge-text">v2.4 // VERIFIED</span>
+            </div>
+        </div>
+
+        <!-- BS Logo ve Marka Alanı -->
+        <div class="brand-header">
+            <div class="logo-wrapper">
+                <div class="logo-aura"></div>
+                <div class="logo-emblem">
+                    <svg class="logo-svg" viewBox="0 0 140 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="sq-border" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#38bdf8" />
+                                <stop offset="50%" stop-color="#818cf8" />
+                                <stop offset="100%" stop-color="#c084fc" />
+                            </linearGradient>
+
+                            <linearGradient id="sq-bg" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#0f172a" stop-opacity="0.95" />
+                                <stop offset="100%" stop-color="#020617" stop-opacity="0.98" />
+                            </linearGradient>
+
+                            <linearGradient id="grad-b" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#ffffff" />
+                                <stop offset="45%" stop-color="#38bdf8" />
+                                <stop offset="100%" stop-color="#0284c7" />
+                            </linearGradient>
+
+                            <linearGradient id="grad-s" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#7dd3fc" />
+                                <stop offset="45%" stop-color="#818cf8" />
+                                <stop offset="100%" stop-color="#c084fc" />
+                            </linearGradient>
+
+                            <linearGradient id="grad-bs-luxury" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#ffffff" />
+                                <stop offset="30%" stop-color="#7dd3fc" />
+                                <stop offset="65%" stop-color="#38bdf8" />
+                                <stop offset="100%" stop-color="#a855f7" />
+                            </linearGradient>
+
+                            <filter id="clean-glow" x="-20%" y="-20%" width="140%" height="140%">
+                                <feDropShadow dx="0" dy="2" stdDeviation="5" flood-color="#38bdf8" flood-opacity="0.45" />
+                            </filter>
+                        </defs>
+
+                        <rect x="8" y="8" width="124" height="124" rx="34"
+                              fill="url(#sq-bg)"
+                              stroke="url(#sq-border)"
+                              stroke-width="2"
+                              filter="url(#clean-glow)" />
+
+                        <rect x="14" y="14" width="112" height="112" rx="28"
+                              fill="none"
+                              stroke="rgba(255, 255, 255, 0.08)"
+                              stroke-width="1" />
+
+                        <circle cx="20" cy="20" r="1.5" fill="#38bdf8" opacity="0.8" />
+                        <circle cx="120" cy="20" r="1.5" fill="#c084fc" opacity="0.8" />
+                        <circle cx="20" cy="120" r="1.5" fill="#38bdf8" opacity="0.8" />
+                        <circle cx="120" cy="120" r="1.5" fill="#c084fc" opacity="0.8" />
+
+                        <path d="M22 28 C45 18 95 18 118 28 C95 38 45 38 22 28 Z" fill="rgba(255,255,255,0.06)" />
+
+                        <text x="70" y="86"
+                              font-family="'Bruno Ace SC', 'Orbitron', sans-serif"
+                              font-size="52"
+                              font-weight="bold"
+                              letter-spacing="3"
+                              text-anchor="middle"
+                              fill="url(#grad-bs-luxury)"
+                              filter="drop-shadow(0 0 14px rgba(56, 189, 248, 0.65))">
+                            BS
+                        </text>
+
+                        <circle cx="70" cy="103" r="2.5" fill="#38bdf8" filter="drop-shadow(0 0 6px #38bdf8)" />
+                        <line x1="42" y1="103" x2="62" y2="103" stroke="rgba(56, 189, 248, 0.5)" stroke-width="1.5" stroke-linecap="round" />
+                        <line x1="78" y1="103" x2="98" y2="103" stroke="rgba(168, 85, 247, 0.5)" stroke-width="1.5" stroke-linecap="round" />
+                    </svg>
+                </div>
+            </div>
+
+            <div class="brand-titles">
+                <div class="brand-name-row">
+                    <span class="brand-letter-highlight">BS</span>
+                    <span class="brand-divider"></span>
+                    <span class="brand-title-main">ALIM & SATIM</span>
+                </div>
+                <span class="brand-subtitle">GÜVENLİ TİCARET</span>
+            </div>
+        </div>
+
+        <!-- Sekme Geçiş Menüsü -->
+        <div class="tab-switcher">
+            <button [class.active]="isLoginMode" (click)="isLoginMode = true">Giriş Yap</button>
+            <button [class.active]="!isLoginMode" (click)="isLoginMode = false">Kayıt Ol</button>
+        </div>
+
+        <!-- BİLDİRİM MESAJLARI ALANI (HATA & BAŞARI) -->
+        <div *ngIf="errorMessage" class="alert-box alert-error">
+            ⚠️ {{ errorMessage }}
+        </div>
+        <div *ngIf="successMessage" class="alert-box alert-success">
+            ✅ {{ successMessage }}
+        </div>
+
+        <!-- GİRİŞ YAP FORMU (novalidate eklendi) -->
+        <div *ngIf="isLoginMode" class="form-section">
+            <h2>Oturum Aç</h2>
+            <p>Devam etmek için kimlik bilgilerinizi girin.</p>
+            <form (ngSubmit)="onLogin()" novalidate>
+                <div class="input-group">
+                    <label>E-posta Adresi</label>
+                    <div class="input-box">
+                        <input type="email" [(ngModel)]="loginData.email" name="loginEmail" placeholder="ornek@domain.com" autocomplete="off" required>
+                        <span class="input-icon">@</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Şifre</label>
+                    <div class="input-box">
+                        <input type="password" [(ngModel)]="loginData.password" name="loginPassword" placeholder="••••••••••••" autocomplete="off" required>
+                        <span class="input-icon">🔒</span>
+                    </div>
+                </div>
+
+                <div class="form-options">
+                    <label class="remember-box">
+                        <input type="checkbox"> Oturumumu açık tut
+                    </label>
+                    <a href="#" class="recovery-link">Şifremi Unuttum</a>
+                </div>
+
+                <button type="submit" class="primary-btn">
+                    <span>Giriş Yap</span>
+                    <div class="btn-beam"></div>
+                </button>
+            </form>
+        </div>
+
+        <!-- KAYIT OL FORMU (novalidate eklendi) -->
+        <div *ngIf="!isLoginMode" class="form-section">
+            <h2>Hesap Oluştur</h2>
+            <p>Yeni nesil platforma hemen kaydolun.</p>
+
+            <form (ngSubmit)="onRegister()" novalidate>
+                <div class="input-group">
+                    <label>Ad Soyad (Min. 3 karakter)</label>
+                    <div class="input-box">
+                        <input type="text" [(ngModel)]="registerData.name" name="regName" placeholder="Ad Soyad" required>
+                        <span class="input-icon">👤</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>E-posta Adresi</label>
+                    <div class="input-box">
+                        <input type="email" [(ngModel)]="registerData.email" name="regEmail" placeholder="ornek@domain.com" required>
+                        <span class="input-icon">@</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Telefon Numarası</label>
+                    <div class="input-box">
+                        <input type="tel" [(ngModel)]="registerData.phone" name="regPhone" placeholder="05321234567" required>
+                        <span class="input-icon">📞</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label>Şifre Belirle (Min. 6 karakter)</label>
+                    <div class="input-box">
+                        <input type="password" [(ngModel)]="registerData.password" name="regPassword" placeholder="••••••••••••" required>
+                        <span class="input-icon">🔒</span>
+                    </div>
+                </div>
+
+                <button type="submit" class="primary-btn register-btn">
+                    <span>Kayıt Ol</span>
+                    <div class="btn-beam"></div>
+                </button>
+            </form>
+        </div>
+
+        <!-- Alt Bilgi -->
+        <div class="card-footer">
+            <span>Encrypted Protocol 256-bit</span>
+        </div>
+
+    </div>
+</div>

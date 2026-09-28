@@ -1,0 +1,1165 @@
+/* Tarayıcı boşluklarını sıfırlar ve tam ekran sabitleme yapar */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html,
+body,
+app-root {
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    background-color: #020617;
+    overflow: hidden;
+}
+
+:host {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    display: block;
+}
+
+
+/* Ekranı ortalayan sinematik arkaplan */
+
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    background: linear-gradient(135deg, rgba(2, 6, 23, 0.4), rgba(15, 23, 42, 0.5)), url('https://www.ototest.tv/wp-content/uploads/2014/01/2el-noter-alim-satim-islemleri.jpg') no-repeat center center fixed;
+    background-size: cover;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    overflow: hidden;
+    position: relative;
+}
+
+
+/* Arkada süzülen neon ışık sızıntıları */
+
+.neon-glow {
+    position: absolute;
+    width: 450px;
+    height: 450px;
+    border-radius: 50%;
+    filter: blur(130px);
+    z-index: 0;
+    opacity: 0.35;
+    animation: glowMove 14s infinite alternate ease-in-out;
+}
+
+.glow-1 {
+    background: rgba(56, 189, 248, 0.4);
+    top: -150px;
+    left: -150px;
+}
+
+.glow-2 {
+    background: rgba(129, 140, 248, 0.4);
+    bottom: -150px;
+    right: -150px;
+    animation-delay: -7s;
+}
+
+@keyframes glowMove {
+    0% {
+        transform: translate(0, 0) scale(1);
+    }
+    100% {
+        transform: translate(50px, 50px) scale(1.15);
+    }
+}
+
+
+/* EKRANIN ÇEŞİTLİ YERLERİNDE HAREKETLİ OTOMOTİV NESNELERİ */
+
+.dynamic-motion-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 2;
+}
+
+
+/* 1. KARTIN ARDINDA KESİNTİSİZ AKAN OTOYOL TRAFİĞİ & GEÇEN ARAÇLAR */
+
+.cruising-car-highway {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    pointer-events: none;
+    z-index: 3;
+    /* Kartın (z-index: 10) tam arkasından geçer */
+}
+
+
+/* Alt Şerit: Kartın orta-alt arkasından geçen ana akış (Soldan Sağa) */
+
+.highway-main-lane {
+    top: 55%;
+    height: 90px;
+}
+
+
+/* Üst Şerit: Kartın üst-logo arkasından geçen karşı akış (Sağdan Sola) */
+
+.highway-upper-lane {
+    top: 32%;
+    height: 85px;
+    opacity: 0.85;
+}
+
+
+/* Otoyol Zemin Çizgisi ve Hızlı Akan Kesik Çizgiler */
+
+.highway-road-surface {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent 0%, rgba(56, 189, 248, 0.25) 30%, rgba(56, 189, 248, 0.25) 70%, transparent 100%);
+}
+
+.road-dash-line {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 2px;
+    background: repeating-linear-gradient( 90deg, rgba(56, 189, 248, 0.6) 0px, rgba(56, 189, 248, 0.6) 35px, transparent 35px, transparent 75px);
+    animation: asphaltDashEast 0.7s linear infinite;
+    filter: drop-shadow(0 0 5px rgba(56, 189, 248, 0.6));
+}
+
+.road-dash-line.line-rev {
+    background: repeating-linear-gradient( 90deg, rgba(192, 132, 252, 0.6) 0px, rgba(192, 132, 252, 0.6) 35px, transparent 35px, transparent 75px);
+    animation: asphaltDashWest 0.7s linear infinite;
+    filter: drop-shadow(0 0 5px rgba(192, 132, 252, 0.6));
+}
+
+@keyframes asphaltDashEast {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(75px);
+    }
+}
+
+@keyframes asphaltDashWest {
+    from {
+        transform: translateX(0);
+    }
+    to {
+        transform: translateX(-75px);
+    }
+}
+
+
+/* Araç Taşıyıcı ve Boydan Boya Akış Animasyonları */
+
+.neon-cruiser-car {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    will-change: transform;
+}
+
+
+/* Soldan Sağa Kesintisiz Akan 3 Araç (Staggered - Sürekli Ekrandalar) */
+
+.lane-flow-1 {
+    animation: driveFlowEast 11s linear infinite;
+    animation-delay: 0s;
+}
+
+.lane-flow-2 {
+    animation: driveFlowEast 14s linear infinite;
+    animation-delay: -4.5s;
+}
+
+.lane-flow-3 {
+    animation: driveFlowEast 17s linear infinite;
+    animation-delay: -9.2s;
+}
+
+
+/* Sağdan Sola Kesintisiz Akan 2 Araç (Staggered) */
+
+.rev-flow-1 {
+    animation: driveFlowWest 13s linear infinite;
+    animation-delay: -2s;
+}
+
+.rev-flow-2 {
+    animation: driveFlowWest 16s linear infinite;
+    animation-delay: -8.5s;
+}
+
+@keyframes driveFlowEast {
+    0% {
+        transform: translateX(-340px);
+    }
+    100% {
+        transform: translateX(calc(100vw + 250px));
+    }
+}
+
+@keyframes driveFlowWest {
+    0% {
+        transform: translateX(calc(100vw + 250px));
+    }
+    100% {
+        transform: translateX(-340px);
+    }
+}
+
+
+/* Araç Gövde Efektleri & Neon Işıltısı */
+
+.cruiser-svg {
+    filter: drop-shadow(0 0 16px rgba(56, 189, 248, 0.55)) drop-shadow(0 8px 16px rgba(0, 0, 0, 0.8));
+    transition: filter 0.3s ease;
+}
+
+.car-hyper .cruiser-svg {
+    filter: drop-shadow(0 0 16px rgba(192, 132, 252, 0.6)) drop-shadow(0 8px 16px rgba(0, 0, 0, 0.8));
+}
+
+.car-gt .cruiser-svg {
+    filter: drop-shadow(0 0 16px rgba(52, 211, 153, 0.6)) drop-shadow(0 8px 16px rgba(0, 0, 0, 0.8));
+}
+
+.car-sedan .cruiser-svg {
+    filter: drop-shadow(0 0 16px rgba(129, 140, 248, 0.6)) drop-shadow(0 8px 16px rgba(0, 0, 0, 0.8));
+}
+
+
+/* Gerçekçi İleriye Uzanan Far Işığı Konisi (Headlight Beam) */
+
+.car-headlight-flare {
+    position: absolute;
+    right: -170px;
+    top: 26px;
+    width: 220px;
+    height: 46px;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.95) 0%, rgba(56, 189, 248, 0.65) 30%, transparent 100%);
+    clip-path: polygon(0% 38%, 100% 0%, 100% 100%, 0% 62%);
+    filter: blur(5px);
+    pointer-events: none;
+}
+
+.beam-wide {
+    width: 260px;
+    height: 56px;
+    top: 32px;
+    background: linear-gradient(90deg, rgba(255, 255, 255, 0.95) 0%, rgba(56, 189, 248, 0.7) 35%, transparent 100%);
+}
+
+.flare-reverse {
+    right: auto;
+    left: -170px;
+    top: 22px;
+    background: linear-gradient(-90deg, rgba(255, 255, 255, 0.95) 0%, rgba(192, 132, 252, 0.65) 30%, transparent 100%);
+    clip-path: polygon(100% 38%, 0% 0%, 0% 100%, 100% 62%);
+}
+
+.flare-emerald {
+    background: linear-gradient(-90deg, rgba(255, 255, 255, 0.95) 0%, rgba(52, 211, 153, 0.65) 30%, transparent 100%);
+}
+
+
+/* Kırmızı Lazer Arka Stop İzi (Taillight Trail) */
+
+.car-taillight-trail {
+    position: absolute;
+    left: -160px;
+    top: 48px;
+    width: 175px;
+    height: 12px;
+    background: linear-gradient(90deg, transparent 0%, rgba(244, 63, 94, 0.25) 35%, rgba(244, 63, 94, 0.95) 100%);
+    filter: blur(4px);
+    pointer-events: none;
+}
+
+.trail-long {
+    left: -220px;
+    width: 235px;
+}
+
+.trail-reverse {
+    left: auto;
+    right: -160px;
+    top: 44px;
+    background: linear-gradient(-90deg, transparent 0%, rgba(244, 63, 94, 0.25) 35%, rgba(244, 63, 94, 0.95) 100%);
+}
+
+
+/* Hızlı Dönen Jantlar */
+
+.spin-wheel {
+    transform-origin: center;
+    animation: wheelFastSpin 0.7s linear infinite;
+}
+
+@keyframes wheelFastSpin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+
+/* 2. Ekranın Çeşitli Yerlerinde Aktif Salınan / Gezen Kapsüller */
+
+.live-motion-badge {
+    position: absolute;
+    pointer-events: auto;
+    cursor: pointer;
+    user-select: none;
+    z-index: 5;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), filter 0.3s;
+}
+
+.live-motion-badge:hover {
+    transform: scale(1.08) !important;
+    filter: brightness(1.25);
+}
+
+.badge-glass-wrap {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: rgba(10, 16, 30, 0.82);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1.5px solid rgba(56, 189, 248, 0.3);
+    border-radius: 20px;
+    padding: 10px 16px;
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.8), 0 0 25px rgba(56, 189, 248, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+.badge-emerald-theme {
+    border-color: rgba(52, 211, 153, 0.4);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.8), 0 0 25px rgba(52, 211, 153, 0.2);
+}
+
+.badge-purple-theme {
+    border-color: rgba(168, 85, 247, 0.4);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.8), 0 0 25px rgba(168, 85, 247, 0.2);
+}
+
+.badge-cyan-theme {
+    border-color: rgba(56, 189, 248, 0.4);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.8), 0 0 25px rgba(56, 189, 248, 0.2);
+}
+
+.badge-gold-theme {
+    border-color: rgba(251, 191, 36, 0.4);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.8), 0 0 25px rgba(251, 191, 36, 0.2);
+}
+
+.badge-blue-theme {
+    border-color: rgba(99, 102, 241, 0.4);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.8), 0 0 25px rgba(99, 102, 241, 0.2);
+}
+
+.badge-icon-box {
+    font-size: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.badge-text-group {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.badge-main-text {
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    color: #f8fafc;
+}
+
+.badge-sub-text {
+    font-size: 10px;
+    color: #94a3b8;
+    font-weight: 500;
+}
+
+.badge-sub-title {
+    font-family: 'Bruno Ace SC', 'Orbitron', sans-serif;
+    font-size: 14px;
+    font-weight: 900;
+    color: #38bdf8;
+    letter-spacing: 1px;
+    text-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
+}
+
+.badge-label-cyan {
+    font-size: 9px;
+    font-weight: 800;
+    color: #cbd5e1;
+    letter-spacing: 1px;
+}
+
+.badge-live-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    margin-left: 4px;
+}
+
+.dot-emerald {
+    background-color: #34d399;
+    box-shadow: 0 0 10px #34d399;
+    animation: pulseBlink 1.8s infinite;
+}
+
+.badge-check-icon {
+    font-size: 12px;
+    font-weight: 900;
+    color: #38bdf8;
+    background: rgba(56, 189, 248, 0.15);
+    border-radius: 50%;
+    padding: 3px 6px;
+    border: 1px solid rgba(56, 189, 248, 0.4);
+}
+
+.badge-pill-growth {
+    font-size: 10px;
+    font-weight: 800;
+    color: #34d399;
+    background: rgba(52, 211, 153, 0.15);
+    padding: 2px 7px;
+    border-radius: 6px;
+    border: 1px solid rgba(52, 211, 153, 0.35);
+}
+
+.badge-vip-tag {
+    font-size: 9px;
+    font-weight: 900;
+    color: #fbbf24;
+    background: rgba(251, 191, 36, 0.15);
+    padding: 2px 6px;
+    border-radius: 4px;
+    border: 1px solid rgba(251, 191, 36, 0.4);
+}
+
+
+/* Takometre Kadranı & İbre Hareketi */
+
+.tachometer-dial {
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tacho-mini-svg {
+    width: 32px;
+    height: 32px;
+}
+
+.tacho-glow-arc {
+    filter: drop-shadow(0 0 6px #38bdf8);
+}
+
+.needle-pulse {
+    transform-origin: 18px 18px;
+    animation: tachoNeedlePulse 3.5s ease-in-out infinite;
+}
+
+@keyframes tachoNeedlePulse {
+    0% {
+        transform: rotate(0deg);
+    }
+    30% {
+        transform: rotate(65deg);
+    }
+    60% {
+        transform: rotate(40deg);
+    }
+    80% {
+        transform: rotate(115deg);
+    }
+    100% {
+        transform: rotate(0deg);
+    }
+}
+
+
+/* 6 Farklı Bölgede Gerçek Gezinme / Salınma Hareketleri */
+
+.badge-pos-1 {
+    top: 14%;
+    left: 7%;
+    animation: motionSway1 9s ease-in-out infinite alternate;
+}
+
+.badge-pos-2 {
+    top: 16%;
+    right: 8%;
+    animation: motionSway2 11s ease-in-out infinite alternate;
+}
+
+.badge-pos-3 {
+    top: 54%;
+    left: 5%;
+    animation: motionSway3 10s ease-in-out infinite alternate;
+}
+
+.badge-pos-4 {
+    top: 56%;
+    right: 6%;
+    animation: motionSway4 12s ease-in-out infinite alternate;
+}
+
+.badge-pos-5 {
+    top: 3.5%;
+    left: 50%;
+    transform: translateX(-50%);
+    animation: motionSway5 8.5s ease-in-out infinite alternate;
+}
+
+.badge-pos-6 {
+    bottom: 12%;
+    left: 14%;
+    animation: motionSway6 10.5s ease-in-out infinite alternate;
+}
+
+@keyframes motionSway1 {
+    0% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+    50% {
+        transform: translate(35px, -28px) rotate(2.5deg);
+    }
+    100% {
+        transform: translate(-25px, 32px) rotate(-2deg);
+    }
+}
+
+@keyframes motionSway2 {
+    0% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+    50% {
+        transform: translate(-38px, -24px) rotate(-2.5deg);
+    }
+    100% {
+        transform: translate(28px, 35px) rotate(2deg);
+    }
+}
+
+@keyframes motionSway3 {
+    0% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+    50% {
+        transform: translate(32px, 36px) rotate(2deg);
+    }
+    100% {
+        transform: translate(-28px, -32px) rotate(-2.2deg);
+    }
+}
+
+@keyframes motionSway4 {
+    0% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+    50% {
+        transform: translate(-36px, 32px) rotate(-2deg);
+    }
+    100% {
+        transform: translate(24px, -36px) rotate(2.2deg);
+    }
+}
+
+@keyframes motionSway5 {
+    0% {
+        transform: translateX(-50%) translateY(0) rotate(0deg);
+    }
+    50% {
+        transform: translateX(calc(-50% + 35px)) translateY(18px) rotate(1.2deg);
+    }
+    100% {
+        transform: translateX(calc(-50% - 35px)) translateY(-14px) rotate(-1.2deg);
+    }
+}
+
+@keyframes motionSway6 {
+    0% {
+        transform: translate(0, 0) rotate(0deg);
+    }
+    50% {
+        transform: translate(40px, -26px) rotate(2deg);
+    }
+    100% {
+        transform: translate(-24px, 24px) rotate(-1.8deg);
+    }
+}
+
+
+/* Küçük Ekranlar & Mobil Uyumluluk */
+
+@media (max-width: 1280px) {
+    .badge-pos-1 {
+        left: 2%;
+        top: 9%;
+        transform: scale(0.85);
+    }
+    .badge-pos-2 {
+        right: 2%;
+        top: 9%;
+        transform: scale(0.85);
+    }
+    .badge-pos-3 {
+        left: 2%;
+        top: 60%;
+        transform: scale(0.85);
+    }
+    .badge-pos-4 {
+        right: 2%;
+        top: 60%;
+        transform: scale(0.85);
+    }
+    .badge-pos-6 {
+        display: none;
+    }
+}
+
+@media (max-width: 1024px) {
+    .dynamic-motion-canvas {
+        display: none;
+    }
+}
+
+
+/* Genişletilmiş ve Lüks Kart Yapısı */
+
+.auth-card {
+    background: rgba(0, 0, 0, 0.4);
+    padding: 50px 50px 40px 50px;
+    border-radius: 32px;
+    width: 100%;
+    max-width: 520px;
+    /* Genişletilmiş kart boyutu */
+    box-shadow: 0 40px 90px rgba(0, 0, 0, 0.95), 0 0 50px rgba(56, 189, 248, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(25px);
+    -webkit-backdrop-filter: blur(25px);
+    border: 1.5px solid rgba(56, 189, 248, 0.4);
+    position: relative;
+    z-index: 10;
+    transition: all 0.4s ease;
+}
+
+.auth-card:hover {
+    box-shadow: 0 50px 110px rgba(0, 0, 0, 0.98), 0 0 70px rgba(56, 189, 248, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+    border-color: rgba(56, 189, 248, 0.8);
+    transform: translateY(-3px);
+}
+
+
+/* Üst Kontrol & Durum Çubuğu */
+
+.card-top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 14px;
+}
+
+.system-status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(255, 255, 255, 0.04);
+    padding: 5px 12px;
+    border-radius: 20px;
+    width: fit-content;
+    border: 1px solid rgba(56, 189, 248, 0.2);
+}
+
+.status-indicator {
+    width: 7px;
+    height: 7px;
+    background-color: #38bdf8;
+    border-radius: 50%;
+    box-shadow: 0 0 10px #38bdf8;
+    animation: pulseBlink 2s infinite;
+}
+
+@keyframes pulseBlink {
+    0% {
+        opacity: 0.4;
+    }
+    50% {
+        opacity: 1;
+        box-shadow: 0 0 15px #38bdf8;
+    }
+    100% {
+        opacity: 0.4;
+    }
+}
+
+.status-text {
+    font-size: 9.5px;
+    color: #94a3b8;
+    font-weight: 700;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+}
+
+.system-badge {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(16, 185, 129, 0.08);
+    border: 1px solid rgba(52, 211, 153, 0.25);
+    padding: 5px 11px;
+    border-radius: 20px;
+}
+
+.badge-dot {
+    width: 6px;
+    height: 6px;
+    background-color: #34d399;
+    border-radius: 50%;
+    box-shadow: 0 0 8px #34d399;
+}
+
+.badge-text {
+    font-size: 9.5px;
+    color: #a7f3d0;
+    font-weight: 700;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+
+/* BS Logo & Marka Alanı */
+
+.brand-header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 22px;
+    position: relative;
+    user-select: none;
+}
+
+.logo-wrapper {
+    position: relative;
+    width: 116px;
+    height: 116px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 14px;
+    cursor: pointer;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.logo-wrapper:hover {
+    transform: translateY(-5px) scale(1.05);
+}
+
+.logo-aura {
+    position: absolute;
+    inset: -20px;
+    border-radius: 40px;
+    background: radial-gradient(circle, rgba(56, 189, 248, 0.5) 0%, rgba(129, 140, 248, 0.3) 50%, rgba(192, 132, 252, 0.15) 70%, transparent 85%);
+    filter: blur(22px);
+    z-index: 0;
+    opacity: 0.7;
+    animation: logoAuraPulse 3.5s ease-in-out infinite alternate;
+    transition: opacity 0.4s, filter 0.4s;
+}
+
+.logo-wrapper:hover .logo-aura {
+    opacity: 1;
+    filter: blur(28px);
+}
+
+.logo-emblem {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: logoFloat 4.5s ease-in-out infinite;
+}
+
+.logo-svg {
+    width: 116px;
+    height: 116px;
+    filter: drop-shadow(0 12px 28px rgba(0, 0, 0, 0.85));
+    overflow: visible;
+}
+
+.brand-titles {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+}
+
+.brand-name-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.brand-letter-highlight {
+    font-family: 'Bruno Ace SC', 'Orbitron', 'Plus Jakarta Sans', sans-serif;
+    font-weight: 900;
+    font-size: 24px;
+    letter-spacing: 2px;
+    background: linear-gradient(135deg, #ffffff 0%, #7dd3fc 40%, #38bdf8 70%, #818cf8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    filter: drop-shadow(0 0 14px rgba(56, 189, 248, 0.6));
+}
+
+.brand-divider {
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: #38bdf8;
+    box-shadow: 0 0 8px #38bdf8;
+}
+
+.brand-title-main {
+    font-family: 'Bruno Ace SC', 'Orbitron', 'Plus Jakarta Sans', sans-serif;
+    font-weight: 800;
+    font-size: 14px;
+    letter-spacing: 3px;
+    color: #f8fafc;
+    text-shadow: 0 2px 10px rgba(56, 189, 248, 0.3);
+}
+
+.brand-subtitle {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #64748b;
+    transition: color 0.3s;
+}
+
+.brand-header:hover .brand-subtitle {
+    color: #94a3b8;
+}
+
+@keyframes spinTechRing {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes logoAuraPulse {
+    0% {
+        opacity: 0.45;
+        transform: scale(0.92);
+    }
+    50% {
+        opacity: 0.85;
+        transform: scale(1.08);
+    }
+    100% {
+        opacity: 0.45;
+        transform: scale(0.92);
+    }
+}
+
+@keyframes logoFloat {
+    0%,
+    100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-4px);
+    }
+}
+
+
+/* Sekme Geçiş Menüsü */
+
+.tab-switcher {
+    display: flex;
+    margin-bottom: 25px;
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 12px;
+    padding: 5px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.tab-switcher button {
+    flex: 1;
+    background: transparent;
+    border: none;
+    padding: 12px;
+    font-weight: 600;
+    cursor: pointer;
+    border-radius: 9px;
+    transition: all 0.3s ease;
+    color: #64748b;
+    font-size: 14px;
+}
+
+.tab-switcher button:hover {
+    color: #f8fafc;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.tab-switcher button.active {
+    background: linear-gradient(135deg, #38bdf8, #818cf8);
+    color: #0f172a;
+    font-weight: 800;
+    box-shadow: 0 4px 20px rgba(56, 189, 248, 0.4);
+}
+
+
+/* Form Başlıkları */
+
+.form-section h2 {
+    margin-bottom: 6px;
+    color: #f8fafc;
+    font-size: 26px;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    text-shadow: 0 2px 15px rgba(56, 189, 248, 0.2);
+}
+
+.form-section p {
+    color: #94a3b8;
+    font-size: 13px;
+    margin-bottom: 20px;
+}
+
+
+/* Input Alanları */
+
+.input-group {
+    margin-bottom: 16px;
+    text-align: left;
+}
+
+.input-group label {
+    display: block;
+    margin-bottom: 6px;
+    font-size: 11px;
+    font-weight: 700;
+    color: #cbd5e1;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+}
+
+.input-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.input-group input {
+    width: 100%;
+    padding: 14px 16px 14px 44px;
+    background: rgba(2, 6, 23, 0.6);
+    border: 1.5px solid rgba(255, 255, 255, 0.12);
+    border-radius: 12px;
+    font-size: 14px;
+    color: #f8fafc;
+    box-sizing: border-box;
+    transition: all 0.3s ease;
+}
+
+.input-icon {
+    position: absolute;
+    left: 15px;
+    font-size: 14px;
+    color: #64748b;
+    pointer-events: none;
+    transition: color 0.3s;
+}
+
+.input-group input:focus {
+    border-color: #38bdf8;
+    background: rgba(2, 6, 23, 0.9);
+    box-shadow: 0 0 20px rgba(56, 189, 248, 0.35), inset 0 0 6px rgba(56, 189, 248, 0.15);
+    outline: none;
+}
+
+.input-group input:focus+.input-icon {
+    color: #38bdf8;
+}
+
+.input-group input::placeholder {
+    color: #475569;
+}
+
+
+/* Form Seçenekleri */
+
+.form-options {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 12px;
+    margin-bottom: 20px;
+    color: #94a3b8;
+}
+
+.remember-box {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+}
+
+.remember-box input {
+    accent-color: #38bdf8;
+    cursor: pointer;
+}
+
+.recovery-link {
+    color: #38bdf8;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.recovery-link:hover {
+    color: #7dd3fc;
+    text-decoration: underline;
+}
+
+
+/* Buton Tasarımları */
+
+.primary-btn {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #0284c7 0%, #38bdf8 100%);
+    color: #ffffff;
+    border: none;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    letter-spacing: 0.8px;
+    box-shadow: 0 8px 25px rgba(2, 132, 199, 0.45);
+    position: relative;
+    overflow: hidden;
+    border: 1.5px solid rgba(255, 255, 255, 0.4);
+}
+
+.register-btn {
+    background: linear-gradient(135deg, #059669 0%, #34d399 100%);
+    box-shadow: 0 8px 25px rgba(5, 150, 105, 0.45);
+}
+
+.btn-beam {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.5), transparent);
+    transition: 0.5s;
+}
+
+.primary-btn:hover .btn-beam {
+    left: 100%;
+}
+
+.primary-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 35px rgba(56, 189, 248, 0.6), 0 0 20px rgba(255, 255, 255, 0.4);
+    border-color: #ffffff;
+}
+
+.register-btn:hover {
+    box-shadow: 0 12px 35px rgba(52, 211, 153, 0.6), 0 0 20px rgba(255, 255, 255, 0.4);
+}
+
+.primary-btn:active {
+    transform: translateY(-1px);
+}
+
+
+/* Kart Alt Bilgi */
+
+.card-footer {
+    margin-top: 20px;
+    text-align: center;
+    font-size: 10px;
+    color: #64748b;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 12px;
+}
+
+
+/* Bildirim ve Uyarı Kutuları (Fütüristik Tema Uyumlu) */
+
+.alert-box {
+    padding: 12px 15px;
+    margin-bottom: 20px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    animation: fadeIn 0.3s ease-in-out;
+}
+
+.alert-error {
+    background: rgba(244, 63, 94, 0.15);
+    border: 1px solid rgba(244, 63, 94, 0.4);
+    color: #fb7185;
+    box-shadow: 0 0 15px rgba(244, 63, 94, 0.15);
+}
+
+.alert-success {
+    background: rgba(52, 211, 153, 0.15);
+    border: 1px solid rgba(52, 211, 153, 0.4);
+    color: #34d399;
+    box-shadow: 0 0 15px rgba(52, 211, 153, 0.15);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-5px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
